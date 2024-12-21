@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Ratios Calculator</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            background-image:
+               url(https://wallpapersworld.org/wp-content/uploads/2023/03/%D8%AE%D9%84%D9%81%D9%8A%D8%A7%D8%AA-%D8%A7%D8%B2%D8%B1%D9%82-%D8%B3%D8%A7%D8%AF%D9%87-19-scaled.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: cover;
+        }
+
+
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            display: inline-block;
+            width: 48%;
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+        }
+
+        .results {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .results h3 {
+            margin-bottom: 15px;
+        }
+
+        .results p {
+            margin: 5px 0;
+        }
+
+        .language-switch {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 5px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            width: 70px;
+            text-align: center;
+        }
+
+        .language-switch:hover {
+            background: #0056b3;
+        }
+
+        body[lang="ar"] .form-group label {
+            text-align: right;
+        }
+
+        body[lang="ar"] button {
+            text-align: center;
+        }
+
+        body[lang="ar"] .form-group input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .download-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .download-btn i {
+            font-size: 20px; /* حجم أيقونة Font Awesome */
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3; /* لون الزر عند التمرير */
+        }
+
+
+        #comparisonResults {
+            display: none;
+            max-width: 400px;
+            margin: 20px ;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        #comparisonResults h3 {
+            margin-bottom: 15px;
+
+        }
+
+        #comparisonResults p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body lang="en">
+    <button class="language-switch" onclick="toggleLanguage()">Switch to Arabic</button>
+
+    <form id="financialForm">
+        <h2 data-lang="title">Financial Ratios Calculator</h2>
+
+
+        <div class="form-group">
+            <label for="currentAssets" data-lang="currentAssets">Current Assets:</label>
+            <input type="number" id="currentAssets" name="currentAssets" required>
+        </div>
+
+        <div class="form-group">
+            <label for="currentLiabilities" data-lang="currentLiabilities">Current Liabilities:</label>
+            <input type="number" id="currentLiabilities" name="currentLiabilities" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cash" data-lang="cash">Cash:</label>
+            <input type="number" id="cash" name="cash" required>
+        </div>
+
+        <div class="form-group">
+            <label for="marketableSecurities" data-lang="marketableSecurities">Marketable Securities:</label>
+            <input type="number" id="marketableSecurities" name="marketableSecurities" required>
+        </div>
+
+        <div class="form-group">
+            <label for="accountsReceivable" data-lang="accountsReceivable">Accounts Receivable:</label>
+            <input type="number" id="accountsReceivable" name="accountsReceivable" required>
+        </div>
+
+        <div class="form-group">
+            <label for="accountsReceivableBeginning" data-lang="accountsReceivableBeginning">Accounts Receivable (Beginning):</label>
+            <input type="number" id="accountsReceivableBeginning" name="accountsReceivableBeginning" required>
+        </div>
+
+        <div class="form-group">
+            <label for="accountsReceivableEnding" data-lang="accountsReceivableEnding">Accounts Receivable (Ending):</label>
+            <input type="number" id="accountsReceivableEnding" name="accountsReceivableEnding" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sales" data-lang="sales">Sales:</label>
+            <input type="number" id="sales" name="sales" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inventory" data-lang="inventory">Inventory:</label>
+            <input type="number" id="inventory" name="inventory" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inventoryBeginning" data-lang="inventoryBeginning">Inventory (Beginning):</label>
+            <input type="number" id="inventoryBeginning" name="inventoryBeginning" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inventoryEnding" data-lang="inventoryEnding">Inventory (Ending):</label>
+            <input type="number" id="inventoryEnding" name="inventoryEnding" required>
+        </div>
+
+        <div class="form-group">
+            <label for="costOfSales" data-lang="costOfSales">Cost of Sales:</label>
+            <input type="number" id="costOfSales" name="costOfSales" required>
+        </div>
+
+        <div class="form-group">
+            <label for="totalLiabilities" data-lang="totalLiabilities">Total Liabilities:</label>
+            <input type="number" id="totalLiabilities" name="totalLiabilities" required>
+        </div>
+
+        <div class="form-group">
+            <label for="shareholdersEquity" data-lang="shareholdersEquity">Shareholders Equity:</label>
+            <input type="number" id="shareholdersEquity" name="shareholdersEquity" required>
+        </div>
+
+        <div class="form-group">
+            <label for="longTermLiabilities" data-lang="longTermLiabilities">Long-term Liabilities:</label>
+            <input type="number" id="longTermLiabilities" name="longTermLiabilities" required>
+        </div>
+
+        <div class="form-group">
+            <label for="incomeBeforeInterestAndTaxes" data-lang="incomeBeforeInterestAndTaxes">Income Before Interest and Taxes:</label>
+            <input type="number" id="incomeBeforeInterestAndTaxes" name="incomeBeforeInterestAndTaxes" required>
+        </div>
+
+        <div class="form-group">
+            <label for="interestExpense" data-lang="interestExpense">Interest Expense:</label>
+            <input type="number" id="interestExpense" name="interestExpense" required>
+        </div>
+
+        <div class="form-group">
+            <label for="netIncome" data-lang="netIncome">Net Income:</label>
+            <input type="number" id="netIncome" name="netIncome" required>
+        </div>
+
+        <div class="form-group">
+            <label for="taxRate" data-lang="taxRate">Tax Rate (%):</label>
+            <input type="number" id="taxRate" name="taxRate" required>
+        </div>
+
+        <div class="form-group">
+            <label for="totalAssetsBeginning" data-lang="totalAssetsBeginning">Total Assets (Beginning):</label>
+            <input type="number" id="totalAssetsBeginning" name="totalAssetsBeginning" required>
+        </div>
+
+        <div class="form-group">
+            <label for="totalAssetsEnding" data-lang="totalAssetsEnding">Total Assets (Ending):</label>
+            <input type="number" id="totalAssetsEnding" name="totalAssetsEnding" required>
+        </div>
+
+        <div class="form-group">
+            <label for="operatingIncome" data-lang="operatingIncome">Operating Income:</label>
+            <input type="number" id="operatingIncome" name="operatingIncome" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cashBeginning" data-lang="cashBeginning">Cash (Beginning):</label>
+            <input type="number" id="cashBeginning" name="cashBeginning" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cashEnding" data-lang="cashEnding">Cash (Ending):</label>
+            <input type="number" id="cashEnding" name="cashEnding" required>
+        </div>
+
+        <div class="form-group">
+            <label for="workingCapitalBeginning" data-lang="workingCapitalBeginning">Working Capital (Beginning):</label>
+            <input type="number" id="workingCapitalBeginning" name="workingCapitalBeginning" required>
+        </div>
+
+        <div class="form-group">
+            <label for="workingCapitalEnding" data-lang="workingCapitalEnding">Working Capital (Ending):</label>
+            <input type="number" id="workingCapitalEnding" name="workingCapitalEnding" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ppeBeginning" data-lang="ppeBeginning">PPE (Beginning):</label>
+            <input type="number" id="ppeBeginning" name="ppeBeginning" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ppeEnding" data-lang="ppeEnding">PPE (Ending):</label>
+            <input type="number" id="ppeEnding" name="ppeEnding" required>
+        </div>
+
+        <button type="submit" data-lang="calculate">Calculate Ratios</button>
+        <button type="button" class="reset-btn" data-lang="reset" onclick="resetForm()">Reset</button>
+    </form>
+
+    <div class="results" id="results" style="display:none;">
+        <h3 data-lang="resultsTitle">Calculated Ratios:</h3>
+        <div id="ratiosOutput"></div>
+    </div>
+
+    <div class="comparisonResults" id="comparisonResults" style="display:none;">
+        <h3 data-lang="comparisonResultsTitle">Compared to 2020:</h3>
+    </div>
+
+    <div class="form-group">
+    <button type="button" class="download-btn" onclick="downloadResults()">
+        <i class="fas fa-download"></i>
+    </button>
+    </div>
+
+
+    <script>
+        const translations = {
+            en: {
+                title: "Financial Ratios Calculator",
+                comparisonResultsTitle: "Compared to 2020:",
+                currentAssets: "Current Assets:",
+                currentLiabilities: "Current Liabilities:",
+                cash: "Cash:",
+                marketableSecurities: "Marketable Securities:",
+                accountsReceivable: "Accounts Receivable:",
+                accountsReceivableBeginning: "Accounts Receivable (Beginning):",
+                accountsReceivableEnding: "Accounts Receivable (Ending):",
+                sales: "Sales:",
+                inventory: "Inventory:",
+                inventoryBeginning: "Inventory (Beginning):",
+                inventoryEnding: "Inventory (Ending):",
+                costOfSales: "Cost of Sales:",
+                totalLiabilities: "Total Liabilities:",
+                shareholdersEquity: "Shareholders Equity:",
+                longTermLiabilities: "Long-term Liabilities:",
+                incomeBeforeInterestAndTaxes: "Income Before Interest and Taxes:",
+                interestExpense: "Interest Expense:",
+                netIncome: "Net Income:",
+                taxRate: "Tax Rate (%):",
+                totalAssetsBeginning: "Total Assets (Beginning):",
+                totalAssetsEnding: "Total Assets (Ending):",
+                operatingIncome: "Operating Income:",
+                cashBeginning: "Cash (Beginning):",
+                cashEnding: "Cash (Ending):",
+                workingCapitalBeginning: "Working Capital (Beginning):",
+                workingCapitalEnding: "Working Capital (Ending):",
+                ppeBeginning: "PPE (Beginning):",
+                ppeEnding: "PPE (Ending):",
+                calculate: "Calculate Ratios",
+                reset: "Reset",
+                downloadResults: "Download Results ",
+                resultsTitle: "Calculated Ratios:",
+                currentRatio: "Current Ratio:",
+                quickRatio: "Quick Ratio:",
+                cashRatio: "Cash Ratio:",
+                receivableTurnover: "Receivable Turnover:",
+                inventoryTurnover: "Inventory Turnover:",
+                debtEquityRatio: "Debt to Equity Ratio:",
+                interestCoverageRatio: "Interest Coverage Ratio:",
+                netProfitMargin: "Net Profit Margin:",
+                returnOnAssets: "Return on Assets:",
+                returnOnEquity: "Return on Equity:",
+            },
+            ar: {
+                title: "حاسبة النسب المالية",
+                comparisonResultsTitle: "مقارنة مع 2020:",
+                currentAssets: ":الأصول المتداولة",
+                currentLiabilities: ":الخصوم المتداولة",
+                cash: ":النقد",
+                marketableSecurities: ":الأوراق المالية القابلة للتداول",
+                accountsReceivable: ":الحسابات المستحقة",
+                accountsReceivableBeginning: ":الحسابات المستحقة (بداية)",
+                accountsReceivableEnding: ":الحسابات المستحقة (نهاية)",
+                sales: ":المبيعات",
+                inventory: ":المخزون",
+                inventoryBeginning: ":المخزون (بداية)",
+                inventoryEnding: ":المخزون (نهاية)",
+                costOfSales: ":تكلفة المبيعات",
+                totalLiabilities: ":إجمالي الخصوم",
+                shareholdersEquity: ":حقوق المساهمين",
+                longTermLiabilities: ":الخصوم طويلة الأجل",
+                incomeBeforeInterestAndTaxes: ":الدخل قبل الفوائد والضرائب",
+                interestExpense: ":مصروف الفوائد",
+                netIncome: ":صافي الدخل",
+                taxRate: ":(%)معدل الضريبة ",
+                totalAssetsBeginning: ":إجمالي الأصول (بداية)",
+                totalAssetsEnding: ":إجمالي الأصول (نهاية)",
+                operatingIncome: ":الدخل التشغيلي",
+                cashBeginning: ":النقد (بداية)",
+                cashEnding: ":النقد (نهاية)",
+                workingCapitalBeginning: ":رأس المال العامل (بداية)",
+                workingCapitalEnding: ":رأس المال العامل (نهاية)",
+                ppeBeginning: ":الأصول الثابتة (بداية)",
+                ppeEnding: "الأصول الثابتة (نهاية:)",
+                calculate: "حساب النسب",
+                reset: "إعادة التعيين",
+                downloadResults: " تنزيل النتائج",
+                resultsTitle: "النسب المحسوبة:",
+                currentRatio: "النسبة الجارية:",
+                quickRatio: "النسبة السريعة:",
+                cashRatio: "النسبة النقدية:",
+                receivableTurnover: "دوران الحسابات المستحقة:",
+                inventoryTurnover: "دوران المخزون:",
+                debtEquityRatio: "نسبة الدين إلى حقوق المساهمين:",
+                interestCoverageRatio: "نسبة تغطية الفوائد:",
+                netProfitMargin: "هامش الربح الصافي:",
+                returnOnAssets: "العائد على الأصول:",
+                returnOnEquity: "العائد على حقوق المساهمين:",
+            }
+        };
+
+         let lang = 'en';
+
+        function toggleLanguage() {
+            lang = lang === 'en' ? 'ar' : 'en';
+            document.body.setAttribute('lang', lang);
+            document.querySelector('.language-switch').textContent = lang === 'en' ? 'ع' : 'En';
+
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                el.textContent = translations[lang][key];
+            });
+        }
+
+
+        document.getElementById('financialForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const currentAssets = parseFloat(document.getElementById('currentAssets').value) || 0;
+            const currentLiabilities = parseFloat(document.getElementById('currentLiabilities').value) || 0;
+            const cash = parseFloat(document.getElementById('cash').value) || 0;
+            const marketableSecurities = parseFloat(document.getElementById('marketableSecurities').value) || 0;
+            const inventory = parseFloat(document.getElementById('inventory').value) || 0;
+            const sales = parseFloat(document.getElementById('sales').value) || 0;
+            const netIncome = parseFloat(document.getElementById('netIncome').value) || 0;
+            const accountsReceivableBeginning = parseFloat(document.getElementById('accountsReceivableBeginning').value) || 0;
+            const accountsReceivableEnding = parseFloat(document.getElementById('accountsReceivableEnding').value) || 0;
+            const inventoryBeginning = parseFloat(document.getElementById('inventoryBeginning').value) || 0;
+            const inventoryEnding = parseFloat(document.getElementById('inventoryEnding').value) || 0;
+            const costOfSales = parseFloat(document.getElementById('costOfSales').value) || 0;
+            const totalLiabilities = parseFloat(document.getElementById('totalLiabilities').value) || 0;
+            const shareholdersEquity = parseFloat(document.getElementById('shareholdersEquity').value) || 0;
+            const incomeBeforeInterestAndTaxes = parseFloat(document.getElementById('incomeBeforeInterestAndTaxes').value) || 0;
+            const interestExpense = parseFloat(document.getElementById('interestExpense').value) || 0;
+            const totalAssetsBeginning = parseFloat(document.getElementById('totalAssetsBeginning').value) || 0;
+            const totalAssetsEnding = parseFloat(document.getElementById('totalAssetsEnding').value) || 0;
+
+            // حساب النسب
+            const currentRatio = currentLiabilities !== 0 ? currentAssets / currentLiabilities : 0;
+            const quickRatio = currentLiabilities !== 0 ? (currentAssets - inventory) / currentLiabilities : 0;
+            const cashRatio = currentLiabilities !== 0 ? (cash + marketableSecurities) / currentLiabilities : 0;
+            const receivableTurnover = sales / ((accountsReceivableBeginning + accountsReceivableEnding) / 2) || 0;
+            const inventoryTurnover = costOfSales / ((inventoryBeginning + inventoryEnding) / 2) || 0;
+            const debtEquityRatio = totalLiabilities / shareholdersEquity || 0;
+            const interestCoverageRatio = incomeBeforeInterestAndTaxes / interestExpense || 0;
+            const netProfitMargin = netIncome / sales || 0;
+            const returnOnAssets = netIncome / ((totalAssetsBeginning + totalAssetsEnding) / 2) || 0;
+            const returnOnEquity = netIncome / shareholdersEquity || 0;
+
+            // عرض النتائج
+            const ratiosOutput = `
+                <p><strong>${translations[lang].currentRatio}</strong> ${currentRatio.toFixed(2)}</p>
+                <p><strong>${translations[lang].quickRatio}</strong> ${quickRatio.toFixed(2)}</p>
+                <p><strong>${translations[lang].cashRatio}</strong> ${cashRatio.toFixed(2)}</p>
+                <p><strong>${translations[lang].receivableTurnover}</strong> ${receivableTurnover.toFixed(2)}</p>
+                <p><strong>${translations[lang].inventoryTurnover}</strong> ${inventoryTurnover.toFixed(2)}</p>
+                <p><strong>${translations[lang].debtEquityRatio}</strong> ${debtEquityRatio.toFixed(2)}</p>
+                <p><strong>${translations[lang].interestCoverageRatio}</strong> ${interestCoverageRatio.toFixed(2)}</p>
+                <p><strong>${translations[lang].netProfitMargin}</strong> ${(netProfitMargin * 100).toFixed(2)}%</p>
+                <p><strong>${translations[lang].returnOnAssets}</strong> ${(returnOnAssets * 100).toFixed(2)}%</p>
+                <p><strong>${translations[lang].returnOnEquity}</strong> ${(returnOnEquity * 100).toFixed(2)}%</p>
+            `;
+
+            document.getElementById('ratiosOutput').innerHTML = ratiosOutput;
+            document.getElementById('results').style.display = 'block';
+
+            // مقارنة مع بيانات Ooredoo
+            const comparisonResults = compareWithOoredoo({
+                netProfitMargin,
+                debtEquityRatio,
+                returnOnAssets,
+                returnOnEquity
+            });
+
+            console.log("Comparison Results:", comparisonResults);
+
+            document.getElementById('comparisonResults').innerHTML = comparisonResults;
+
+            document.getElementById('comparisonResults').style.display = 'block';
+        });
+
+        // وظيفة للمقارنة مع بيانات Ooredoo
+        const ooredooData = {
+            revenue: 230, // الإيرادات
+            netProfit: 25, // صافي الأرباح
+            profitMargin: 10.9, // هامش صافي الربح (%)
+            debtToAssets: 52.4, // نسبة الديون إلى الأصول (%)
+            returnOnEquity: 12.5, // عائد حقوق الملكية (%)
+            returnOnAssets: 6.0 // عائد الأصول (%)
+        };
+
+        function compareWithOoredoo(calculatedRatios) {
+            const comparisonResults = `
+                <h3>${translations[lang].comparisonResultsTitle}</h3>
+                <p><strong>${translations[lang].netProfitMargin}</strong> ${calculatedRatios.netProfitMargin.toFixed(2)}% (${calculatedRatios.netProfitMargin > ooredooData.profitMargin ? "↑" : "↓"} ${ooredooData.profitMargin}%)</p>
+                <p><strong>${translations[lang].debtEquityRatio}</strong> ${calculatedRatios.debtEquityRatio.toFixed(2)}% (${calculatedRatios.debtEquityRatio > ooredooData.debtToAssets ? "↑" : "↓"} ${ooredooData.debtToAssets}%)</p>
+                <p><strong>${translations[lang].returnOnAssets}</strong> ${calculatedRatios.returnOnAssets.toFixed(2)}% (${calculatedRatios.returnOnAssets > ooredooData.returnOnAssets ? "↑" : "↓"} ${ooredooData.returnOnAssets}%)</p>
+                <p><strong>${translations[lang].returnOnEquity}</strong> ${calculatedRatios.returnOnEquity.toFixed(2)}% (${calculatedRatios.returnOnEquity > ooredooData.returnOnEquity ? "↑" : "↓"} ${ooredooData.returnOnEquity}%)</p>
+            `;
+            return comparisonResults;
+        }
+
+        // وظيفة إعادة تعيين النموذج
+        function resetForm() {
+            document.getElementById('financialForm').reset(); // إعادة تعيين النموذج
+            document.getElementById('results').style.display = 'none'; // إخفاء نتائج الحسابات
+            document.getElementById('comparisonResults').innerHTML = ''; // مسح نتائج المقارنة
+            document.getElementById('ratiosOutput').innerHTML = ''; // مسح نتائج النسب
+            document.getElementById('comparisonResults').style.display = 'none'; // إخفاء مربع المقارنة
+        }
+
+
+        // وظيفة تنزيل النتائج
+        function downloadResults() {
+            const resultsDiv = document.getElementById('ratiosOutput');
+            // التحقق من أن المحتوى ليس فارغًا
+            if (!resultsDiv || resultsDiv.innerText.trim() === "") {
+                const alertMessage = lang === 'en' ? "No results to download." : "لا توجد نتائج للتنزيل.";
+                alert(alertMessage);
+                return;
+            }
+
+            const resultsText = resultsDiv.innerText;
+            const fileName = lang === 'en' ? "Financial_Ratios.txt" : "النسب_المالية.txt";
+
+            const blob = new Blob([resultsText], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+        }
+
+        // ربط الأزرار بالوظائف
+        document.getElementById('resetButton').addEventListener('click', resetForm);
+        document.getElementById('downloadButton').addEventListener('click', downloadResults);
+
+
+
+    </script>
+
+  <style>
+
+        body[lang="ar"] h2 {
+            text-align: center;
+            direction: rtl;
+            color: #00008b;
+        }
+
+        body[lang="en"] h2 {
+            text-align: center;
+            direction: ltr;
+            color: #00008b;
+
+        }
+
+
+        body[lang="ar"] .results {
+            direction: rtl;
+            text-align: right;
+        }
+
+        body[lang="ar"] .comparisonResults {
+            direction: rtl;
+            text-align: right;
+        }
+
+  </style>
+
+</body>
+</html>
